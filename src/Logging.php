@@ -5,6 +5,15 @@ namespace Nora\Logging;
 /**
  * ロギング
  */
-class Logging
+abstract class Logging
 {
+    public static function createLogger(array $writers = [])
+    {
+        $logger = new Logger();
+
+        foreach ($writers as $writer) {
+            $logger->addWriter(Writer::create($writer));
+        }
+        return $logger;
+    }
 }
