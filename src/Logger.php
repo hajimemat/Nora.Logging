@@ -6,7 +6,26 @@ namespace Nora\Logging;
  */
 class Logger
 {
+    use LoggerTrait;
+
     private $writers = [];
+
+    public static function create($spec) : Logger
+    {
+        $Logger = new self();
+
+        foreach ($spec['writers'] as $writer) {
+            $Writer = Writer::create([
+                'class' => $writer['class']
+            ]);
+            // フォーマットをセット
+            $Writer->setFormatter(Formatter::create($writer['formatter']));
+            $Writer->setFilter(Filter::create($writer['filter']));
+
+            $Logger->addWriter($Writer);
+        }
+        return $Logger;
+    }
 
     public function __construct()
     {
@@ -17,13 +36,19 @@ class Logger
         $this->writers[] = $writer;
     }
 
-    /**
-     * トレースログを発行する
-     */
-    public function trace($message)
+    protected function log(Log $log)
     {
-        var_Dump($message);
-        throw new \Exception($message);
+        $cnt = 0;
+        foreach ($this->writers as $writer)
+        {
+            $cnt += $writer->write($log) ? 1: 0;
+        }
+        return $cnt;
+    }
+
+    public function createLog($level, $message)
+    {
+        return Log::create($level, $message);
     }
 
     /**

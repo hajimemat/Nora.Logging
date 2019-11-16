@@ -9,8 +9,22 @@ use Nora\Logging\Log;
  */
 class FileWriter extends Base
 {
-    public function write(Log $log)
+    private $file;
+
+    public function __construct(string $file)
     {
-        echo $log;
+        $this->file = $file;
+        if (!is_writable($this->file)) {
+            throw new \Exception('Cant Write Log File '.$this->file);
+        }
+    }
+
+    public function doWrite($log)
+    {
+        $fp = fopen($this->file, 'a');
+        flock($fp, LOCK_EX);
+        fwrite($fp, $log);
+        flock($fp, LOCK_UN);
+        fclose($fp);
     }
 }
