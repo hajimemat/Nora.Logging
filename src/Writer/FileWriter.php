@@ -14,6 +14,14 @@ class FileWriter extends Base
     public function __construct(string $file)
     {
         $this->file = $file;
+        if (!is_dir(dirname($this->file))) {
+            mkdir(dirname($this->file), 0777);
+            chmod(dirname($this->file), 0777);
+        }
+        if (!file_exists($this->file)) {
+            touch($this->file);
+            chmod($this->file, 0666);
+        }
         if (!is_writable($this->file)) {
             throw new \Exception('Cant Write Log File '.$this->file);
         }
