@@ -19,7 +19,8 @@ class LoggerFactory
 
         foreach ($spec['writers'] as $writer) {
             $Writer = (new WriterFactory)([
-                'class' => $writer['class']
+                'class' => $writer['class'],
+                'args' => $writer['args']
             ]);
             // フォーマットをセット
             $Writer->setFormatter((new FormatterFactory)($writer['formatter']));

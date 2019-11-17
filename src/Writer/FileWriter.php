@@ -14,6 +14,7 @@ class FileWriter extends Base
     public function __construct(string $file)
     {
         $this->file = $file;
+
         if (!is_dir(dirname($this->file))) {
             mkdir(dirname($this->file), 0777);
             chmod(dirname($this->file), 0777);
