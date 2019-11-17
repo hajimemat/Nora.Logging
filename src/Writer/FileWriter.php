@@ -32,7 +32,7 @@ class FileWriter extends Base
     {
         $fp = fopen($this->file, 'a');
         flock($fp, LOCK_EX);
-        fwrite($fp, $log);
+        fwrite($fp, trim($log) . PHP_EOL);
         flock($fp, LOCK_UN);
         fclose($fp);
     }
