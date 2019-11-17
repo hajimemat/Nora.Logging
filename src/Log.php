@@ -20,46 +20,34 @@ class Log
     private $message;
 
     /**
-     * @var string ログカテゴリ
-     */
-    private $category;
-
-    /**
      * @var array ログメタデータ
      */
-    private $meta = [];
-
-    /**
-     * ログデータを作る
-     */
-    public function create(int $level, $message, string $category = "default") : self
-    {
-        // ログ用メタデータを作成
-        $date = new DateTime('now');
-        $localtime = $date->format('Y-m-d H:i:s.u');
-        $date->setTimezone(new DateTimeZone('GMT'));
-        $gmt = $date->format('Y-m-d\TH:i:s.u\Z');
-
-        $meta = [
-            'gmt' => $gmt,
-            'localtime' => $localtime
-        ];
-
-        return new Log($level, $category, $message, $meta);
-    }
+    private $context = [];
 
     /**
      * @param int $level ログレベル
-     * @param string $category ログカテゴリ
-     * @param mixed $message ログメッセージ
-     * @param array $meta ログメタ
+     * @param string $message ログメッセージ
+     * @param array $context ログメタ
      */
-    public function __construct(int $level, string $category, $message, array $meta = [])
+    public function __construct(int $level, $message, array $context = [])
     {
-        $this->level    = $level;
-        $this->category = $category;
-        $this->message  = $message;
-        $this->meta     = $meta;
+        // ログ用メタデータを作成
+        // $date = new DateTime('now');
+        // $localtime = $date->format('Y-m-d H:i:s.u');
+        // $date->setTimezone(new DateTimeZone('GMT'));
+        // $gmt = $date->format('Y-m-d\TH:i:s.u\Z');
+
+        // $meta = [
+        //     'gmt' => $gmt,
+        //     'localtime' => $localtime
+        // ];
+        //
+        // return new Log($level, $category, $message, $meta);
+        $this->level = $level;
+        $this->message = $message;
+        $this->context = $context;
+
+        $this->date = new DateTime('now');
     }
 
     /**
@@ -71,11 +59,11 @@ class Log
     }
 
     /**
-     * カテゴリ取得
+     * コンテクスト
      */
-    public function getCategory() : string
+    public function getContext() : array
     {
-        return $this->category;
+        return $this->context;
     }
 
     /**
@@ -83,7 +71,8 @@ class Log
      */
     public function getGmt() 
     {
-        return $this->meta['gmt'] ?? null;
+        $this->date->setTimezone(new DateTimeZone('GMT'));
+        return $this->date->format('Y-m-d\TH:i:s.u\Z');
     }
 
     /**
@@ -91,7 +80,7 @@ class Log
      */
     public function getLocaltime() 
     {
-        return $this->meta['localtime'] ?? null;
+        return $this->date->format('Y-m-d H:i:s.u');
     }
 
     /**
@@ -113,7 +102,7 @@ class Log
             'level' => strtoupper(LogLevel::$levelText[$this->getLevel()]),
             'gmt' => $this->getGmt(),
             'localtime' => $this->getLocaltime(),
-            'category' => $this->getCategory(),
+            'context' => $this->getContext(),
         ];
 
         if (is_string($message)) {

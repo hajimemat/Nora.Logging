@@ -1,10 +1,12 @@
 <?php
 namespace Nora\Logging;
 
+use Psr;
+
 /**
  * ログレベル
  */
-abstract class LogLevel
+abstract class LogLevel extends Psr\Log\LogLevel
 {
     const LEVEL_TRACE     = 0b1;
     const LEVEL_DEBUG     = 0b10;

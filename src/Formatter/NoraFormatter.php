@@ -22,9 +22,9 @@ class NoraFormatter extends Base
             strtoupper(
                 LogLevel::$levelText[$log->getLevel()]
             ),
-            $log->getCategory(),
-            json_encode(
-                $log->getMessage(),
+            $log->getMessage(),
+            json_encode (
+                $log->getContext(),
                 JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES
             )
         );

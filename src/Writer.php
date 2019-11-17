@@ -10,11 +10,6 @@ abstract class Writer
     private $formatter;
     private $filter;
 
-    public static function create(array $writers = [])
-    {
-        return (new \ReflectionClass($writers['class']))->newInstanceArgs($writers['args'] ?? []);
-    }
-
     public function write(Log $log)
     {
         if ($this->filter($log)) {
