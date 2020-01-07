@@ -1,5 +1,8 @@
 {
     "name": "nora-php/logging",
+    "description": "logging library",
+    "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Hajime MATSUMOTO",
