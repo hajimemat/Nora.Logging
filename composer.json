@@ -1,5 +1,5 @@
 {
-    "name": "nora-php/logging",
+    "name": "avap/nora-logging",
     "description": "logging library",
     "type": "library",
     "license": "MIT",
